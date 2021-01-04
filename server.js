@@ -15,11 +15,15 @@ wss.on('connection', (ws) => {
 
   ws.on('message', function (message) {
   	if (message) {
-  		const data = JSON.parse(message);
+  		try {
+  			const data = JSON.parse(message);
 
-  		wss.clients.forEach((client) => {
-    		client.send(data);
-  		});
+	  		wss.clients.forEach((client) => {
+	    		client.send(data);
+	  		});
+  		} catch(error) {
+  			console.log(error);
+  		}	
   	}
   });
 
