@@ -11,21 +11,21 @@ const { Server } = require('ws');
 const wss = new Server({ server });
 
 wss.on('connection', (ws) => {
-  console.log('Client connected');
-
   ws.on('message', function (message) {
   	if (message) {
   		try {
-  			const data = JSON.parse(message);
+  			const data = JSON.parse(jsonEscape(message));
 
 	  		wss.clients.forEach((client) => {
 	    		client.send(data);
 	  		});
-  		} catch(error) {
-  			console.log(error);
-  		}	
+  		} catch(error) {}	
   	}
   });
 
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {});
 });
+
+function jsonEscape(str)  {
+    return str.replace(/\n/g, " ").replace(/\r/g, "").replace(/\t/g, "");
+}
